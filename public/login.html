@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="Memeorable" ng-controller="loginCtrl as login">
+
+<head>
+  <!-- Webpage Title -->
+  <title>Login - MEMEORABLE</title>
+  <!-- Website META data -->
+  <meta property="og:image" content="https://www.memeorable.xyz/assets/img/avatar/avatar-white.jpg">
+  <meta property="og:image:width" content="600">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Google Fonts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>
+    WebFont.load({
+      google: {
+        "families": ["Montserrat:400,500,600,700", "Noto+Sans:400,700"]
+      },
+      active: function () {
+        sessionStorage.fonts = true;
+      }
+    });
+  </script>
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+
+  <!-- (CSS) Stylesheet -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/preloader.css">
+  <link rel="stylesheet" href="assets/css/elisyam-1.5.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+
+  <link rel="stylesheet" href="assets/css/animate/animate.min.css">
+
+  <!-- Javascript (JS) Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="assets/js/angular.min.js"></script>
+  <script src="assets/js/ang-helpers.js"></script>
+  <script src="assets/js/angular-app.js"></script>
+  <script src="assets/js/crypto-js.min.js"></script>
+</head>
+
+<body class="bg-white">
+  <!-- Begin Preloader -->
+  <div id="preloader">
+    <div class="canvas">
+      <img src="assets/img/brand/memeorable_red.png" alt="logo" class="prelogo">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <!-- End Preloader -->
+  <!-- Begin Container -->
+  <div class="container-fluid no-padding h-100" id="content">
+    <div class="row flex-row h-100 bg-white">
+      <!-- Begin Left Content -->
+      <div class="col-xl-8 col-lg-6 col-md-5 no-padding">
+        <div class="elisyam-bg login-bg">
+          <!-- Background -->
+          <div class="elisyam-overlay overlay-08"></div> <!-- Overlay BG colour -->
+          <div class="authentication-col-content mx-auto">
+            <!-- Content Area -->
+            <img src="assets/img/brand/memeorable_white.png" class="login-logo">
+            <!-- <h1 class="gradient-text-01">MEMEORABLE</h1> --><br>
+            <span class="description">
+              Browse. Create. Share.
+              <br>
+              <b>Meme.</b>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- End Left Content -->
+      <!-- Begin Right Content -->
+      <div class="col-xl-4 col-lg-6 col-md-7 my-auto no-padding" ng-keydown='login.keyListen($event)'>
+        <div class="authentication-form mx-auto">
+          <div class="alert alert-primary" role="alert" ng-show='buggy'>
+            <strong>Early Development Warning!</strong>
+            <br>
+            <hr class="bg-secondary">
+            As we are releasing new features and fixing up some kinks and bugs, we may periodically reset our user and
+            posts database.
+            If you are not able to log in to your account, please try creating an account again.
+          </div>
+          <br>
+          <div class="alert alert-success mb-3" role="alert" ng-show='newUser'>
+            New user account successfully created!
+          </div>
+          <h3>Sign In to MEMEORABLE</h3>
+          <!-- LOGIN FORM -->
+          <form>
+            <div class="group material-input">
+              <input value='{{remember}}' ng-style="(invalidUser||incorrectUserPass) && {'borderColor' : 'red'}"
+                type="text" id="username" ng-click="login.resetColor(1)" required>
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label>Username</label>
+            </div>
+            <div class="group material-input">
+              <input ng-style="(invalidPass||incorrectUserPass) && {'borderColor' : 'red'}" type="password"
+                id="password" ng-click="login.resetColor(0)" required>
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label>Password</label>
+            </div>
+            <div ng-show='invalidUser || invalidPass || incorrectUserPass' class="alert alert-danger" role="alert"
+              id="wronguserpass">
+              <div ng-show='incorrectUserPass'>
+                <p><b>Invalid Username or Password</b></p>
+                <ul style='list-style: circle inside !important;'>
+                  <li style='list-style: circle inside !important;'>Incorrect username or password</li>
+                </ul>
+              </div>
+              <div ng-show='invalidUser || invalidPass'>
+                <p><b>Username or Password missing!!!</b></p>
+                <ul style='list-style: circle inside !important;'>
+                  <li ng-show='invalidUser' style='list-style: circle inside !important;'>Missing Username</li>
+                  <li ng-show='invalidPass' style='list-style: circle inside !important;'>Missing Password</li>
+                </ul>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col text-left">
+              <div class="styled-checkbox">
+                <input type="checkbox" name="checkbox" id="remember">
+                <label for="remember">Remember me</label>
+              </div>
+            </div>
+            <div class="col text-right">
+              <a href="email.html">Forgot Password ?</a>
+            </div>
+          </div>
+          <div class="sign-btn text-center">
+            <a ng-click="login.logIn()" class="btn btn-lg btn-gradient-01">
+              Sign in
+            </a>
+          </div>
+          <div class="register"><b>Don't have an account?</b><br> <a href="register.html">Create an account</a></div>
+          <br>
+          <div class="row text-center">
+            <a href="/discover.html"><b>
+                &#8592; Back to Discovery Page</b> </a> </div> <!-- End LOGIN FORM-->
+        </div>
+        <!-- End Right Content -->
+      </div>
+    </div>
+  </div>
+  <!-- End Container -->
+  <!-- JS Files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.6.8-fix/jquery.nicescroll.min.js">
+  </script>
+  <script src="../node_modules/angular-nicescroll/angular-nicescroll.js"></script>
+  <script src="assets/vendors/js/base/core.min.js"></script>
+  <script src="assets/vendors/js/app/app.min.js"></script>
+  <!-- End of JS files -->
+</body>
+
+</html>

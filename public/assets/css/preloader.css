@@ -1,0 +1,52 @@
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  /* background-color: #2c304d;  */
+  z-index: 99999;
+}
+
+.team-pic {
+  width: 100%;
+  max-width: 300px;
+}
+
+.canvas {
+  position: absolute;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.prelogo {
+  display: block;
+  width: 120px;
+  margin-bottom: 25px;
+}
+
+.spinner {
+  animation: spinner 1s linear infinite;
+  border: solid 5px transparent;
+  border-top: solid 5px #e76c90;
+  /* border-top: solid 5px #5d5386; */
+  border-radius: 100%;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+ 
+<html>
+<head>
+    <title>MEME Editor</title>
+    <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.4.js">
+    </script>
+    <script language="javascript" src="drag.js" > </script>-->
+    <script src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="js/Textbox.js"></script>
+    <script src="js/Draggable.js"></script>
+    <script>
+    $(function(){
+        // canvas related variables
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        // variables used to get mouse position on the canvas
+        var $canvas = $("#canvas");
+        var canvasOffset = $canvas.offset();
+        var offsetX = canvasOffset.left;
+        var offsetY = canvasOffset.top;
+        var scrollX = $canvas.scrollLeft();
+        var scrollY = $canvas.scrollTop();
+
+        // variables to save last mouse position
+        // used to see how far the user dragged the mouse
+        // and then move the text by that distance
+        var startX;
+        var startY;
+
+        // an array to hold text objects
+        var texts = [];
+
+        // this var will hold the index of the hit-selected text
+        var selectedText = -1;
+
+        let count = 0
+        let GlobalSize = 30
+        let GlobalColor = "white"
+        function addText() {
+            //Create an input type dynamically.
+            div_name = 'drag' + count;
+            let div = document.createElement('div');
+            div.setAttribute("id",div_name);
+            
+            let element = document.createElement("input");
+
+            let textbox_name = 'textbox' + count;
+            //Assign different attributes to the element.
+            element.setAttribute("type", "text");
+            element.setAttribute("id", textbox_name);
+            element.setAttribute("class", "textbox");
+            element.setAttribute("placeholder", "Input Text");
+            element.style.fontSize = GlobalSize;
+            element.style.color = GlobalColor;
+            count++;
+
+
+            // 'foobar' is the div id, where new fields are to be added
+            let main = document.getElementById("ParentOfDrags");
+            div.appendChild(element);
+            main.appendChild(div);
+            new Draggable(div_name,'ParentOfDrags')
+        }
+
+    function removeText(){
+        if(count == 0){
+            return;
+        }
+        let main = document.getElementById("ParentOfDrags");
+        main.removeChild(main.lastChild);
+        count--;
+    }
+
+    function changeColor(color) {
+        let texts = document.getElementsByClassName("textbox");
+        if (color == "white") {
+            GlobalColor = "white";
+            for (i = 0; i < texts.length; i++) {
+                texts[i].style.color = "white";
+                
+            }
+        } else {
+            GlobalColor = "black";
+            for (i = 0; i < texts.length; i++) {
+                texts[i].style.color = "black";
+                
+            }
+        }
+        return true;
+    }
+
+    function changeSize(size){
+        let texts = document.getElementsByClassName("textbox");
+        GlobalSize = size;
+        for (i = 0; i < texts.length; i++) {
+            let textid = "textbox" + i;
+            document.getElementById(textid).style.fontSize = size
+
+        }
+    }
+
+        // clear the canvas & redraw all texts
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < texts.length; i++) {
+                var text = texts[i];
+                ctx.fillText(text.text, text.x, text.y);
+            }
+        }
+
+        // test if x,y is inside the bounding box of texts[textIndex]
+        function textHittest(x, y, textIndex) {
+            var text = texts[textIndex];
+            return (x >= text.x && x <= text.x + text.width && y >= text.y - text.height && y <= text.y);
+        }
+
+        // handle mousedown events
+        // iterate through texts[] and see if the user
+        // mousedown'ed on one of them
+        // If yes, set the selectedText to the index of that text
+        function handleMouseDown(e) {
+            e.preventDefault();
+            startX = parseInt(e.clientX - offsetX);
+            startY = parseInt(e.clientY - offsetY);
+            // Put your mousedown stuff here
+            for (var i = 0; i < texts.length; i++) {
+                if (textHittest(startX, startY, i)) {
+                    selectedText = i;
+                }
+            }
+        }
+
+        // done dragging
+        function handleMouseUp(e) {
+            e.preventDefault();
+            selectedText = -1;
+        }
+
+        // also done dragging
+        function handleMouseOut(e) {
+            e.preventDefault();
+            selectedText = -1;
+        }
+
+        // handle mousemove events
+        // calc how far the mouse has been dragged since
+        // the last mousemove event and move the selected text
+        // by that distance
+        function handleMouseMove(e) {
+            if (selectedText < 0) {
+                return;
+            }
+            e.preventDefault();
+            mouseX = parseInt(e.clientX - offsetX);
+            mouseY = parseInt(e.clientY - offsetY);
+
+            // Put your mousemove stuff here
+            var dx = mouseX - startX;
+            var dy = mouseY - startY;
+            startX = mouseX;
+            startY = mouseY;
+
+            var text = texts[selectedText];
+            text.x += dx;
+            text.y += dy;
+            draw();
+        }
+
+        // listen for mouse events
+        $("#canvas").mousedown(function (e) {
+            handleMouseDown(e);
+        });
+        $("#canvas").mousemove(function (e) {
+            handleMouseMove(e);
+        });
+        $("#canvas").mouseup(function (e) {
+            handleMouseUp(e);
+        });
+        $("#canvas").mouseout(function (e) {
+            handleMouseOut(e);
+        });
+
+        $("#submit").click(function(){
+
+            // calc the y coordinate for this text on the canvas
+            var y=texts.length*20+20;
+
+            // get the text from the input element
+            var text={text:$("#theText").val(),x:20,y:y};
+
+            // calc the size of this text for hit-testing purposes
+            ctx.font="30px verdana";
+            text.width=ctx.measureText(text.text).width;
+            text.height=16;
+
+            // put this new text in the texts array
+            texts.push(text);
+
+            // redraw everything
+            draw();
+
+            });
+    });
+</script>
+    <style>
+        body,input { font-size: 9pt; }
+        #dCanvas,#dLine { clear: both; }
+        .option
+        {
+            float: left; width: 20px; height: 20px; border: 2px solid #cccccc;
+            margin-right: 4px; margin-bottom: 4px;
+        }
+        .active { border: 2px solid black; }
+        .lw { text-align: center; vertical-align: middle; }
+        img.output { border: 1px solid green; }
+        #cSketchPad { cursor: arrow; }
+        #canvas {
+            border:1px solid red;
+        }
+        #theText {
+            width:10em;
+        }
+    </style>
+    <!--<script>
+        $(function () {
+            //利用.toDataqURL()將繪圖結果轉成圖檔
+            $("#bGenImage").click(function () {
+                $("#dOutput").html(
+                $("<img />", { src: $canvas[0].toDataURL(),
+                    "class": "output"
+                }));
+            });
+        });
+    </script>
+    -->
+</head>
+<body>
+<!--<div id="dPallete"></div>
+<div id="dLine"></div>
+<div id="dCanvas">
+<canvas id="cSketchPad" width="300" height="300" style="border: 2px solid gray" />
+</div>
+<input type="button" id="bGenImage" value="Generate Image" />
+<div id="dOutput"></div>
+-->
+<h4>Add text to canvas and drag it</h4>
+<canvas id="canvas" width=300 height=300></canvas><br>
+<input id="theText" type="text">
+<button id="submit">Draw text on canvas</button>
+<button id="save"> Save and Share!</button><br>
+Color: <select name="color-change" onChange="changeColor(value);">
+    <option value='white' selected="selected">White</option>
+    <option value='black'>Black</option>
+       </select>
+  Font Size: <select name="font-size" onChange="changeSize(value)">
+    <option value="20px">20</option>
+    <option value="22px">22</option>
+    <option value="24px">24</option>
+    <option value="26px">26</option>
+    <option value="28px">28</option>
+    <option value="30px" selected="selected">30</option>
+    <option value="32px">32</option>
+    <option value="34px">34</option>
+    <option value="36px">36</option>
+    <option value="38px">38</option>
+    <option value="40px">40</option>
+    <option value="42px">42</option>
+    <option value="44px">44</option>
+    <option value="46px">46</option>
+    <option value="48px">48</option>
+    <option value="50px">50</option>
+  </select>
+  
+  <button name="addText" onclick="addText()">New Textbox</button>
+  <button name="removeText" onclick="removeText()">Remove Textbox</button>
+  <p></p>
+  <button name="Done" onclick="saveMeme()">Upload Meme</button>
+</body>
+</html>

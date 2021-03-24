@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <!-- Webpage Title -->
+  <title>Reset Password - MEMEORABLE</title>
+  <!-- Website META data -->
+  <meta property="og:image" content="https://www.memeorable.xyz/assets/img/avatar/avatar-white.jpg">
+  <meta property="og:image:width" content="600">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Google Fonts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>
+    WebFont.load({
+      google: {
+        "families": ["Montserrat:400,500,600,700", "Noto+Sans:400,700"]
+      },
+      active: function () {
+        sessionStorage.fonts = true;
+      }
+    });
+  </script>
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+
+  <!-- (CSS) Stylesheet -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href='assets/css/preloader.css'>
+  <link rel="stylesheet" href="assets/css/elisyam-1.5.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+
+  <link rel="stylesheet" href="assets/css/animate/animate.min.css">
+
+  <!-- Javascript (JS) Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="assets/js/angular.min.js"></script>
+</head>
+
+<body class="bg-white">
+  <!-- Begin Preloader -->
+  <div id="preloader">
+    <div class="canvas">
+      <img src="assets/img/brand/memeorable_red.png" alt="logo" class="prelogo">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <!-- End Preloader -->
+  <!-- Begin Container -->
+  <div class="container-fluid no-padding h-100" id="content">
+    <div class="row flex-row h-100 bg-white">
+      <!-- Begin Left Content -->
+      <div class="col-xl-8 col-lg-6 col-md-5 no-padding">
+        <div class="elisyam-bg login-bg">
+          <!-- Background -->
+          <div class="elisyam-overlay overlay-08"></div> <!-- Overlay BG colour -->
+          <div class="authentication-col-content mx-auto">
+            <!-- Content Area -->
+            <img src="assets/img/brand/memeorable_white.png" class="login-logo">
+            <h1 class="gradient-text-01 title-text">Ready to get started?</h1>
+          </div>
+        </div>
+      </div>
+      <!-- End Left Content -->
+      <!-- Begin Right Content -->
+      <div class="col-xl-4 col-lg-6 col-md-7 my-auto no-padding">
+        <!-- Begin Form -->
+        <div class="authentication-form mx-auto">
+          <h3>Reset Password</h3>
+          <form>
+            <div class="group material-input">
+              <input type="email" name="email" REQUIRED id="email">
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label>Email</label>
+            </div>
+          </form>
+          <div class="sign-btn text-center">
+            <a class="btn btn-lg btn-gradient-01" onclick="resetEmail()">
+              Send Reset Email
+            </a>
+          </div>
+          <div class="register">
+            <b>
+              Already have an account?
+            </b>
+            <br>
+            <a href="login.html">
+              Sign In
+            </a>
+          </div>
+        </div>
+        <!-- End Form -->
+      </div>
+      <!-- End Right Content -->
+    </div>
+    <!-- End Row -->
+  </div>
+  <script>
+    function resetEmail() {
+      var element = document.getElementById("email").value;
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "http://localhost:8569/api/forgot");
+      xhttp.onload = () => {
+        if (xhttp.status == 404) {
+          console.log("email not found");
+          alert("Email not found");
+        } else {
+          window.location = "/login.html";
+        }
+      }
+      xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhttp.send(JSON.stringify({
+        email: element
+      }));
+    }
+  </script>
+  <!-- Begin Vendor Js -->
+  <script src="assets/vendors/js/base/jquery.min.js"></script>
+  <script src="assets/vendors/js/base/core.min.js"></script>
+  <!-- End Vendor Js -->
+  <!-- Begin Page Vendor Js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.6.8-fix/jquery.nicescroll.min.js"></script>
+  <script src="../node_modules/angular-nicescroll/angular-nicescroll.js"></script>
+  <script src="assets/vendors/js/app/app.min.js"></script>
+  <!-- End Page Vendor Js -->
+</body>
+
+</html>

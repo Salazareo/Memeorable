@@ -1,0 +1,47 @@
+input{
+    background: transparent;
+    border: 0px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    font-size: 30px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 1; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+  }
+
+  img{
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+  .container img {
+    width: 700px;
+    height: auto;
+    /*right: 100"x;
+    top: 20px;*/
+  }
+  .textbox {
+    /*border:0;*/
+  	background-color:transparent;
+  	height: auto;
+  }
+  .meme_img_a {
+    width: 100%;
+    position:static;
+  }

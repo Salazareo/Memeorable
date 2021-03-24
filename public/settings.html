@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="Memeorable" ng-controller="themeCtrl as theme">
+
+<!-- HEAD AREA -->
+
+<head>
+  <!-- Webpage Title -->
+  <title>Settings - MEMEORABLE</title>
+  <!-- Website META data -->
+  <meta property="og:image" content="https://www.memeorable.xyz/assets/img/avatar/avatar-white.jpg">
+  <meta property="og:image:width" content="600">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Google Fonts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>
+    WebFont.load({
+      google: {
+        "families": ["Montserrat:400,500,600,700", "Noto+Sans:400,700"]
+      },
+      active: function () {
+        sessionStorage.fonts = true;
+      }
+    });
+  </script>
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon/favicon-16x16.png">
+  <!-- (CSS) Stylesheet -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/preloader.css">
+  <link rel="stylesheet" ng-href="assets/css/{{darkmode && 'elisyam-1.5-dark.css' || 'elisyam-1.5.css'}}">
+  <link rel="stylesheet" ng-href="assets/css/{{darkmode && 'custom-dark.css' || 'custom.css'}}">
+  <!-- Javascript (JS) Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="assets/js/angular.min.js"></script>
+  <script src="assets/js/ang-helpers.js"></script>
+  <script src="assets/js/crypto-js.min.js"></script>
+  <script src="assets/js/angular-app.js"></script>
+  <!-- Start of Body -->
+
+<body id="page-top">
+  <!-- Begin Preloader -->
+  <div id="preloader">
+    <div class="canvas">
+      <img src="assets/img/brand/memeorable_red.png" alt="logo" class="prelogo">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <!-- End Preloader -->
+  <div class="page db-social" id="content">
+    <!-- Begin Header -->
+    <header class="header">
+      <nav class="navbar fixed-top">
+        <!-- Search Bar -->
+        <div class="search-box" style="display: none;" ng-keydown='theme.keyListen($event)'>
+          <button class="dismiss">
+            <i class="ion-close-round"></i>
+          </button>
+          <form id="searchForm" role="search">
+            <input type="search" placeholder="Search something ... (spaces will be stripped)" class="form-control"
+              id="SearchBar" autofocus>
+          </form>
+        </div>
+        <!-- Top NavBar -->
+        <div class="navbar-holder d-flex align-items-center align-middle justify-content-between">
+          <!-- LEFT SIDE OF TOP -->
+          <div class="col-4">
+            <div class="navbar-header">
+              <!-- Toggle Button -->
+              <a id="toggle-btn" href="#" class="menu-btn active">
+                <span></span>
+                <span></span>
+                <span></span>
+              </a>
+            </div>
+          </div>
+          <!-- CENTER OF TOP -->
+          <div class="col-4 mx-auto text-center d-block">
+            <a href=index.html>
+              <img src="assets/img/brand/memeorable_white.png" alt="logo" class="mx-auto d-block justify-content-center"
+                style="width: 70px;" id="brand">
+            </a>
+          </div>
+          <!-- RIGHT SIDE OF TOP -->
+          <div class="col-4">
+            <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center pull-right">
+              <!-- Search  -->
+              <li class="nav-item d-flex align-items-center">
+                <a id="search" href="#">
+                  <i class="la la-search"></i>
+                </a>
+              </li>
+              <li ng-hide='loggedOut'>
+                <!-- Create Now Button -->
+                <a class="btn btn-secondary my-auto ripple mr-3 mb-3 d-none d-sm-none d-md-block text-danger"
+                  role="button" data-toggle="modal" data-target="#success-modal">
+                  Create Now
+                </a>
+              </li>
+              <!-- User and User Dropdown -->
+              <li class="nav-item dropdown" ng-hide='loggedOut'>
+                <a id="user" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false" class="nav-link">
+                  <img src="{{userPic}}" class="avatar rounded-circle mx-auto">
+                </a>
+                <ul aria-labelledby="user" class="user-size dropdown-menu">
+                  <li class="welcome">
+                    <img src="{{userPic}}" class="avatar rounded-circle mx-auto">
+                  </li>
+                  <li class="mx-auto text-center">
+                    <span id="username">{{User.username}}</span>
+                  </li>
+                  <li class="separator"></li>
+                  <li>
+                    <a href="profile.html" class="dropdown-item">
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a href="settings.html" class="dropdown-item">
+                      Settings
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="dropdown-item">
+                      Help/FAQ (Coming Soon)
+                    </a>
+                  </li>
+                  <li class="separator"></li>
+                  <li class="text-center">
+                    <button id="darkmodebutton" value="darkoff" ng-click="theme.swapDarkmode(!darkmode)"
+                      class="btn btn-primary btn-square mr-1 mb-2 mx-auto">
+                      Turn Dark Mode {{darkmode && "Off" || "On"}}
+                    </button>
+                  </li>
+                  <li>
+                    <a rel="nofollow" ng-click="theme.logOut()" href="login.html"
+                      class="dropdown-item logout text-center" data-toggle="tooltip" data-placement="bottom" title=""
+                      data-original-title="Log Out">
+                      <i class="la la-sign-out"></i>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- End Topbar -->
+      </nav>
+    </header>
+    <!-- End Header -->
+
+    <!-- Page Content -->
+    <div class="page-content d-flex align-items-stretch">
+      <!-- LEFT SIDE BAR NAVIGATION -->
+      <div class="compact-sidebar light-sidebar has-shadow">
+        <nav class="side-navbar box-scroll sidebar-scroll">
+          <ul class="list-unstyled left-nav">
+            <!-- Add <span> between the button text to add hover disappearing effect -->
+            <li ng-hide='loggedOut'>
+              <a href="index.html">
+                <i class="ti ti-layout-media-center-alt"></i>
+                Newsfeed
+              </a>
+            </li>
+            <li ng-show='loggedOut'>
+              <a href="login.html">
+                <i class="ti ti-lock"></i>
+                Login
+              </a>
+            </li>
+            <li>
+              <a href="discover.html">
+                <i class="ti ti-gallery"></i>
+                Discover
+              </a>
+            </li>
+            <li ng-hide='loggedOut'>
+              <a href="profile.html">
+                <i class="ti ti-user"></i>
+                Profile
+              </a>
+            </li>
+            <li ng-hide='loggedOut'>
+              <hr class="bg-secondary d-block d-sm-block d-md-none">
+            </li>
+            <li ng-hide='loggedOut'>
+              <a href="#" class="my-auto d-block d-sm-block d-md-none" role="button" data-toggle="modal"
+                data-target="#success-modal">
+                <i class="la la-plus"></i>
+                Create Now
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div ng-show='loggedOut' class="content-inner compact">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="error-02 mx-auto mb-3 text-center">
+                <h1 class="text-gradient-03">OOF</h1>
+                <h2>You need to be logged in to mess with account settings!</h2>
+                <br>
+                <p>Create an account or Log in to view this page.</p>
+                <p>Or checkout the Discovery Page to see the newest Memes!</p>
+                <a href="/login.html" class="btn btn-gradient-04">Proceed to Login</a>
+                <a href="/discover.html" class="btn btn-gradient-03">Checkout Discovery</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Begin Content -->
+      <div ng-hide='loggedOut' class="content-inner compact" ng-controller='settingsCtrl as settings'>
+        <div class="container-fluid">
+          <!-- Begin Page Header-->
+          <div class="row">
+            <div class="page-header">
+              <div class="d-flex align-items-center">
+                <h2 class="page-header-title">Profile</h2>
+                <div>
+                  <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html"><i class="ti ti-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="profile.html">Profile</a></li>
+                    <li class="breadcrumb-item active">Settings</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="alert alert-success" role="alert" ng-show='success'>
+                <strong>Yay!</strong> Your changes has been saved successfully!
+              </div>
+              <div class="alert alert-danger" role="alert" ng-show='changeErrors()'>
+                <strong>
+                  Your changes could not be saved:
+                </strong>
+                <br>
+                <span>
+                  <ul style='list-style: circle inside !important;'>
+                    <li ng-show='serverError' style='list-style: circle inside !important;'>
+                      Server error :( please try again later
+                    </li>
+                    <li ng-show='invalidDesc' style='list-style: circle inside !important;'>
+                      Invalid about me!
+                    </li>
+                    <li ng-show='notMatch' style='list-style: circle inside !important;'>
+                      Passwords do not match
+                    </li>
+                    <li ng-show='incorrectPass' style='list-style: circle inside !important;'>
+                      Old password is incorrect!
+                    </li>
+                    <li ng-show='badPass' style='list-style: circle inside !important;'>
+                      Invalid Password!
+                    </li>
+                  </ul>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- End Page Header -->
+          <div class="row flex-row">
+            <div class="col-xl-3">
+              <!-- Begin Widget -->
+              <div class="widget has-shadow">
+                <div class="widget-body">
+                  <div class="mt-5">
+                    <img src="{{userPic}}" style="width: 120px; height: 120px; object-fit: cover;"
+                      class="avatar rounded-circle d-block mx-auto">
+                  </div>
+                  <h3 class="text-center mt-3 mb-1">
+                    {{User.username}}
+                  </h3>
+                  <div class="em-separator separator-dashed"></div>
+                  <ul class="nav flex-column">
+                    <li class="nav-item" ng-class="{'settings-active': settings.curTab == 1}">
+                      <a ng-click="settings.swapTab(1)" class="nav-link" href="">
+                        <i class="la la-user la-2x align-middle pr-2"></i>
+                        Profile Settings
+                      </a>
+                    </li>
+                    <li class="nav-item" ng-class="{'settings-active': settings.curTab == 4}">
+                      <a ng-click="settings.swapTab(2)" class="nav-link" href="">
+                        <i class="la la-lock la-2x align-middle pr-2"></i>
+                        Security
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a rel="nofollow" ng-click='theme.logOut()' href="login.html" class="nav-link">
+                        <i class="la la-sign-out la-2x align-middle pr-2"></i>
+                        Sign Out
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- End Widget -->
+            </div>
+            <div class="col-xl-9">
+              <!-- (1) START PROFILE SETTINGS -->
+              <div class="widget has-shadow" id="settings_profile" ng-show="settings.curTab == 1">
+                <!-- HEADER -->
+                <div class="widget-header bordered no-actions d-flex align-items-center">
+                  <h4>Profile Settings</h4>
+                </div>
+                <!-- BODY -->
+                <div class="widget-body">
+                  <div class="col-10 ml-auto">
+                    <div class="section-title mt-3 mb-3">
+                      <h4>Account Information</h4>
+                    </div>
+                  </div>
+                  <form class="form-horizontal">
+                    <div class="form-group row d-flex align-items-center mb-5">
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Username</label>
+                      <div class="col-lg-6">
+                        <input type="text" class="form-control" placeholder="{{User.username}}" DISABLED>
+                      </div>
+                    </div>
+                    <div class="form-group row d-flex align-items-center mb-5">
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Email</label>
+                      <div class="col-lg-6">
+                        <input type="text" class="form-control" placeholder='{{email}}' DISABLED>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="em-separator separator-dashed"></div>
+                  <div class="col-10 ml-auto">
+                    <div class="section-title mt-3 mb-3">
+                      <h4>Profile Page</h4>
+                    </div>
+                  </div>
+                  <form class="form-horizontal">
+                    <div class="form-group row d-flex align-items-center mb-5">
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">Joined Date</label>
+                      <div class="col-lg-6">
+                        <input type="text" class="form-control" placeholder="{{joined}}" DISABLED>
+                      </div>
+                    </div>
+                    <div class="form-group row d-flex align-items-center mb-5" ng-keydown='settings.keyListen($event)'>
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">About Me</label>
+                      <div class="col-lg-6">
+                        <textarea id='set_desc' rows="4" class="form-control">{{(aboutMe? aboutMe : "")}}</textarea>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- Save Changes -->
+                  <div class="col-12">
+                    <div class="widget-body">
+                      <div class="text-right">
+                        <button class="btn btn-gradient-01" ng-click="settings.saveChanges()">
+                          Save Changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="em-separator separator-dashed"></div>
+                  <div class="col-10 ml-auto">
+                    <div class="section-title mt-3 mb-3">
+                      <h4>Profile Picture</h4>
+                    </div>
+                  </div>
+                  <form class="form-horizontal">
+                    <div class="form-group row d-flex align-items-center mb-5">
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">
+                        Upload Picture
+                      </label>
+                      <div class="col-lg-6">
+                        <p>
+                          <span class="text-secondary">Supported File Types:</span>
+                          jpg, jpeg, png, gif, tiff
+                          <br>
+                          <span class="text-secondary">Maximum File Size:</span>
+                          5.0MB
+                        </p>
+                        <div ng-controller="UploadController">
+                          <div class="alert alert-danger hidden" role="alert" id="fileERROR">
+                            <span id="fileERRORmsg"></span>
+                          </div>
+                          <input id="imgUpload" type="file" ng-file-select="onFileSelect($files)">
+                          <br>
+                          <br>
+                          <b class="text-primary">Preview:</b>
+                          <br>
+                          <i ng-hide="imageSrc">No image choosed</i>
+                          <img ng-src="{{imageSrc}}" class="previewProfileImg">
+                          <br>
+                          <br>
+                          <div class="row text-right">
+                            <div class="col-12">
+                              <div ng-controller="UploadController" class="d-inline">
+                                <a class="btn btn-info mr-1 mb-2" href="" role="button"
+                                  ng-click="addFile('profilePicture', 'pic', 'pic');">
+                                  <p class="d-inline">
+                                    Upload & Set Profile Picture
+                                  </p>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!-- (2) START SECURITY SETTINGS -->
+              <div class="widget has-shadow" id="settings_security" ng-show="settings.curTab == 2">
+                <!-- HEADER -->
+                <div class="widget-header bordered no-actions d-flex align-items-center">
+                  <h4>Security Settings</h4>
+                </div>
+                <!-- BODY -->
+                <div class="widget-body">
+                  <div class="col-10 ml-auto">
+                    <div class="section-title mt-3 mb-3">
+                      <h4>Change Password</h4>
+                    </div>
+                  </div>
+                  <form class="form-horizontal" ng-keydown='settings.keyListen($event)'>
+                    <div class="form-group row d-flex align-items-center mb-5">
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">
+                        Old Password
+                      </label>
+                      <div class="col-lg-6">
+                        <input type="password" id="pw" class="form-control" placeholder="">
+                      </div>
+                    </div>
+                    <div class="form-group row d-flex align-items-center mb-5">
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">
+                        New Password
+                      </label>
+                      <div class="col-lg-6">
+                        <input type="password" id="new_pw" class="form-control" placeholder="">
+                      </div>
+                    </div>
+                    <div class="form-group row d-flex align-items-center mb-5">
+                      <label class="col-lg-2 form-control-label d-flex justify-content-lg-end">
+                        Confirm Password
+                      </label>
+                      <div class="col-lg-6">
+                        <input type="password" id="new_pw_con" class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </form>
+                  <div class="col-12">
+                    <div class="widget-body">
+                      <div class="text-right">
+                        <button class="btn btn-gradient-01" ng-click="settings.changePassword()">
+                          Change Password
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="em-separator separator-dashed"></div>
+                </div>
+              </div>
+              <!-- (4) END PROFILE SETTINGS -->
+            </div>
+          </div>
+          <!-- End Row -->
+        </div>
+        <!-- End Container -->
+        <!-- Begin Page Footer-->
+        <footer class="main-footer">
+          <div class="row">
+            <div
+              class="col-xl-6 col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-xl-start justify-content-lg-start justify-content-md-start justify-content-center">
+              <p>&copy; 2019 Memeorable. All Rights Reserved.</p>
+            </div>
+            <div
+              class="col-xl-6 col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-center">
+              <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="changelog.html">Changelog</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="about.html">About</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </footer>
+        <!-- End Page Footer -->
+        <a href="#" class="go-top"><i class="la la-arrow-up"></i></a>
+      </div>
+      <!-- End of Content Area -->
+    </div>
+    <!-- End Page Content -->
+  </div>
+
+  <!-- Upload Modal -->
+  <div id="success-modal" class="modal fade" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center mb-2">
+          <span class="ti-large ti-ruler-pencil mt-5"></span>
+          <div class="section-title mt-5 mb-2">
+            <h2 class="upload-modal-title">Create your Meme</h2>
+          </div>
+          <p class="mb-5">Select a template option.</p>
+          <a href="upload.html" class="btn btn-secondary mb-3 mr-2" role="button"><span class="ti-upload"></span>
+            Upload Template</a>
+          <a href="choosetemplate.html" class="btn btn-secondary mb-3 ml-2" role="button"><span
+              class="ti-layout-grid3"></span> Choose from Library</a>
+          <br>
+          <a href="" class="btn btn-danger mb-3 mx-auto px-4" role="button" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End of Upload Modal -->
+
+  <!-- Upload Modal -->
+  <div id="uploading-modal" class="modal dark-modal-bg fade-in" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center mb-2">
+          <span class="ti-large ti-image mt-5"></span>
+          <div class="section-title mt-5 mb-2">
+            <h2 class="upload-modal-title">
+              Uploading Profile Picture
+            </h2>
+          </div>
+          <p class="mb-5">
+            Stay put. We'll bring you back once the image is uploaded.
+            <br>
+            <b>Do not refresh the page.</b>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End of Upload Modal -->
+  <!-- Other JS script + files -->
+  <script src="assets/js/core.min.js"></script>
+  <script src="assets/vendors/js/nicescroll/nicescroll.min.js"></script>
+  <script src="assets/vendors/js/app/app.min.js"></script>
+  <!-- Tooltip Script -->
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+</body>
+
+</html>
